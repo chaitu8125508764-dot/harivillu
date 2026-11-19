@@ -96,19 +96,22 @@ export default function Navbar() {
               className="flex items-center gap-2 sm:gap-3 cursor-pointer select-none" 
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full rani-gradient-bg p-0.5 shadow-md flex items-center justify-center flex-shrink-0">
-                <div className="w-full h-full rounded-full bg-temple-crimson flex items-center justify-center overflow-hidden border border-amber-300/40">
-                  <span className="font-accent text-xl sm:text-2xl text-amber-300 font-bold">హ</span>
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-600 shadow-md flex items-center justify-center flex-shrink-0">
+                <div className="w-full h-full rounded-full bg-white overflow-hidden p-0.5 flex items-center justify-center shadow-inner">
+                  <img
+                    src="/images/harivillu-logo.jpg"
+                    alt="Harivillu Collections"
+                    className="w-full h-full object-contain rounded-full"
+                  />
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gradient-to-tr from-amber-400 to-rose-500 rounded-full border-2 border-white"></span>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-1">
-                  <span className="font-serif text-xl sm:text-3xl font-bold tracking-tight text-temple-maroon">
+                  <span className="font-serif text-lg sm:text-2xl font-bold tracking-tight text-temple-maroon">
                     Harivillu
                   </span>
-                  <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-rani-600 px-1 py-0.2 bg-rani-50 rounded border border-rani-200">
-                    Sarees
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-800 px-1.5 py-0.2 bg-amber-50 rounded border border-amber-300">
+                    Collections
                   </span>
                 </div>
                 <span className="hidden sm:inline-block text-[10px] tracking-wider text-slate-500 uppercase font-medium">

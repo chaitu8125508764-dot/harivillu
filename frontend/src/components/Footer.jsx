@@ -106,14 +106,23 @@ export default function Footer() {
           {/* Brand & Ethos */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full rani-gradient-bg p-0.5 flex items-center justify-center">
-                <div className="w-full h-full rounded-full bg-temple-crimson flex items-center justify-center">
-                  <span className="font-accent text-xl text-amber-300 font-bold">హ</span>
+              <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-600 shadow-md flex items-center justify-center flex-shrink-0">
+                <div className="w-full h-full rounded-full bg-white overflow-hidden p-0.5 flex items-center justify-center shadow-inner">
+                  <img
+                    src="/images/harivillu-logo.jpg"
+                    alt="Harivillu Collections Logo"
+                    className="w-full h-full object-contain rounded-full"
+                  />
                 </div>
               </div>
-              <span className="font-serif text-2xl font-bold text-white tracking-tight">
-                Harivillu Sarees
-              </span>
+              <div className="flex flex-col">
+                <span className="font-serif text-2xl font-bold text-white tracking-tight">
+                  Harivillu Collections
+                </span>
+                <span className="text-[10px] text-amber-300 font-medium tracking-widest uppercase">
+                  Pure Handloom Silk Heritage
+                </span>
+              </div>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">

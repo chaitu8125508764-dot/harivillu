@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShopProvider } from './context/ShopContext';
+import SplashScreen from './components/SplashScreen';
 import Navbar from './components/Navbar';
 import MobileStoriesBar from './components/MobileStoriesBar';
 import Hero from './components/Hero';
@@ -16,10 +17,17 @@ import LiveNotificationToast from './components/LiveNotificationToast';
 import MobileBottomNav from './components/MobileBottomNav';
 
 function AppContent() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-slate-800 font-sans selection:bg-rose-500 selection:text-white pb-14 lg:pb-0">
       
-      {/* Top Header */}
+      {/* Grand Luxury Brand Splash Screen Intro with Official Logo */}
+      {showSplash && (
+        <SplashScreen onComplete={() => setShowSplash(false)} />
+      )}
+
+      {/* Top Header with Harivillu Collections Official Logo */}
       <Navbar />
 
       {/* Mobile Stories & Quick Highlights Bar */}
