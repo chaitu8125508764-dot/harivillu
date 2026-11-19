@@ -255,7 +255,7 @@ export default function CartDrawer() {
 
           {/* Footer Breakdown & Sticky Checkout CTA */}
           {cart.length > 0 && !orderPlaced && (
-            <div className="p-4 border-t border-slate-200 bg-white space-y-2.5 pb-safe sm:pb-4">
+            <div className="p-4 border-t border-slate-200 bg-white space-y-2.5 nav-bottom-padding sm:pb-4">
               <div className="space-y-1 text-xs text-slate-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>

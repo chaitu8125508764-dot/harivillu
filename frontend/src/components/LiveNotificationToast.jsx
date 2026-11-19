@@ -17,10 +17,10 @@ export default function LiveNotificationToast() {
         </div>
       )}
 
-      {/* Real-time Purchase Social Proof Ticker (Bottom Left, Elevated Above Mobile Nav) */}
+      {/* Real-time Purchase Social Proof Ticker (Bottom Left, Positioned Flush Above Mobile Bottom Nav) */}
       {showLiveActivity && liveActivity && (
-        <div className="fixed bottom-20 sm:bottom-5 left-3 sm:left-5 z-30 max-w-[92vw] sm:max-w-sm animate-in fade-in slide-in-from-bottom-5 duration-500">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 shadow-2xl border border-amber-200/80 flex items-center gap-2.5 sm:gap-3.5">
+        <div className="fixed bottom-[4.25rem] sm:bottom-5 left-3 right-3 sm:right-auto sm:left-5 z-30 sm:max-w-sm animate-in fade-in slide-in-from-bottom-3 duration-500 pointer-events-auto">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 shadow-xl border border-amber-200/80 flex items-center gap-2.5 sm:gap-3.5">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-rose-500 flex items-center justify-center text-white flex-shrink-0 shadow-md">
               <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
@@ -44,7 +44,7 @@ export default function LiveNotificationToast() {
 
             <button
               onClick={() => setShowLiveActivity(false)}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-full"
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-full flex-shrink-0"
               aria-label="Dismiss purchase notification"
             >
               <X className="w-3.5 h-3.5" />

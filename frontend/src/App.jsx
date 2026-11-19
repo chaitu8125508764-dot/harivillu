@@ -20,7 +20,7 @@ function AppContent() {
   const [showSplash, setShowSplash] = useState(true);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-slate-800 font-sans selection:bg-rose-500 selection:text-white pb-14 lg:pb-0">
+    <div className="min-h-[100dvh] flex flex-col bg-[#FAF7F2] text-slate-800 font-sans selection:bg-rose-500 selection:text-white content-bottom-space lg:pb-0 overflow-x-hidden max-w-full">
       
       {/* Grand Luxury Brand Splash Screen Intro with Official Logo */}
       {showSplash && (
@@ -34,7 +34,7 @@ function AppContent() {
       <MobileStoriesBar />
 
       {/* Main Home Sections */}
-      <main className="flex-1">
+      <main className="flex-1 w-full max-w-full overflow-x-hidden">
         <Hero />
         <CategoriesSection />
         <ProductGrid />

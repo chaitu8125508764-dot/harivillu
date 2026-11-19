@@ -182,7 +182,7 @@ export default function QuickViewModal() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-slate-200 space-y-2 pb-safe sm:pb-0">
+              <div className="pt-3 border-t border-slate-200 space-y-2 nav-bottom-padding sm:pb-0">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
