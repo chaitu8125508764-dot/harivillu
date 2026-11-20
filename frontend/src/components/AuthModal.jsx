@@ -42,8 +42,8 @@ export default function AuthModal() {
   } = useShop();
 
   // Active view: 'main' | 'otp' | 'google-chooser' | 'register'
-  const [view, setView] = useState('main'); 
-  const [phoneNumber, setPhoneNumber] = useState('98480 22338');
+  const [view, setView] = useState('main');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [otpDigits, setOtpDigits] = useState(['4', '2', '9', '8']);
   const [resendTimer, setResendTimer] = useState(30);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -197,8 +197,8 @@ export default function AuthModal() {
             {view === 'google-chooser' ? 'Sign in with Google' : 'Login or Sign Up'}
           </h3>
           <p className="text-[11px] text-slate-600 mt-0.5">
-            {view === 'google-chooser' 
-              ? 'Choose an account to continue to Harivillu Collections' 
+            {view === 'google-chooser'
+              ? 'Choose an account to continue to Harivillu Collections'
               : 'Unlock saved child measurements, live BlueDart tracking & 450 Silk Coins'}
           </p>
 
@@ -219,27 +219,47 @@ export default function AuthModal() {
           {/* ============================================================== */}
           {view === 'main' && (
             <div className="space-y-4 animate-in fade-in duration-200">
-              
+
               {/* 1. Mobile Number Input (Flipkart / Amazon Standard) */}
               <form onSubmit={handleRequestOtp} className="space-y-3">
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                    Enter Mobile Number
-                  </label>
-                  <div className="relative flex items-center shadow-xs">
-                    <div className="absolute left-3 flex items-center gap-1.5 text-slate-800 text-xs font-bold pr-2.5 border-r border-slate-300">
-                      <span className="text-sm">🇮🇳</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                      Enter Mobile Number
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setPhoneNumber('9848022338')}
+                      className="text-[10px] text-temple-crimson font-bold hover:underline"
+                    >
+                      Fill Demo: 9848022338
+                    </button>
+                  </div>
+                  <div className="flex items-center rounded-2xl border border-slate-300 bg-slate-50 overflow-hidden focus-within:ring-2 focus-within:ring-temple-crimson focus-within:border-temple-crimson focus-within:bg-white shadow-xs transition-all">
+                    <div className="flex items-center gap-1.5 px-3 py-3 bg-slate-100 text-slate-800 text-xs font-bold border-r border-slate-200 select-none flex-shrink-0">
+                      <span className="text-base leading-none">🇮🇳</span>
                       <span>+91</span>
                     </div>
                     <input
                       type="tel"
                       maxLength={10}
-                      placeholder="Enter 10-digit mobile number"
+                      placeholder="10-digit mobile number"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
-                      className="w-full pl-22 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white transition-all"
+                      className="flex-1 w-full px-3.5 py-3 bg-transparent text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                      autoFocus
                       required
                     />
+                    {phoneNumber && (
+                      <button
+                        type="button"
+                        onClick={() => setPhoneNumber('')}
+                        className="p-2 text-slate-400 hover:text-slate-600 mr-1"
+                        aria-label="Clear mobile number"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -311,7 +331,7 @@ export default function AuthModal() {
           {/* ============================================================== */}
           {view === 'otp' && (
             <form onSubmit={handleVerifyOtp} className="space-y-4 animate-in fade-in duration-200">
-              
+
               {/* Back to Number */}
               <div className="flex items-center justify-between text-xs pb-1 border-b border-slate-100">
                 <span className="text-slate-600">
@@ -327,7 +347,7 @@ export default function AuthModal() {
               </div>
 
               {/* Simulated Auto-Read SMS Alert (Android / Flipkart style) */}
-              <div 
+              <div
                 onClick={handleAutoFillOtp}
                 className="p-3 bg-emerald-50/80 border border-emerald-300 rounded-2xl cursor-pointer hover:bg-emerald-100/70 transition-colors flex items-center justify-between"
                 title="Click to auto-fill SMS code"
@@ -377,7 +397,7 @@ export default function AuthModal() {
                           document.getElementById(`otp-${idx - 1}`)?.focus();
                         }
                       }}
-                      className="w-13 h-13 text-center text-xl font-bold bg-slate-50 border-2 border-amber-500/60 rounded-2xl focus:border-temple-crimson focus:bg-white focus:outline-none shadow-sm transition-all"
+                      className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-slate-50 border-2 border-amber-500/60 rounded-2xl focus:border-temple-crimson focus:bg-white focus:outline-none shadow-sm transition-all"
                     />
                   ))}
                 </div>
@@ -428,7 +448,7 @@ export default function AuthModal() {
           {/* ============================================================== */}
           {view === 'google-chooser' && (
             <div className="space-y-3 animate-in fade-in duration-200">
-              
+
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex items-center gap-2.5">
                 <GoogleIcon className="w-5 h-5 flex-shrink-0" />
                 <div className="text-xs leading-tight min-w-0">
@@ -449,11 +469,10 @@ export default function AuthModal() {
                       type="button"
                       disabled={isGoogleLoading}
                       onClick={() => handleSelectGoogleAccount(acc)}
-                      className={`w-full flex items-center justify-between p-3 rounded-2xl border text-left transition-all ${
-                        isCurrentSelected 
-                          ? 'border-blue-500 bg-blue-50/60 shadow-sm' 
-                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 bg-white'
-                      }`}
+                      className={`w-full flex items-center justify-between p-3 rounded-2xl border text-left transition-all ${isCurrentSelected
+                        ? 'border-blue-500 bg-blue-50/60 shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 bg-white'
+                        }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-9 h-9 rounded-full ${acc.avatarColor} text-white flex items-center justify-center font-bold text-sm shadow-xs`}>
