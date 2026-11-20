@@ -13,7 +13,8 @@ import {
   MessageCircle,
   Truck,
   ArrowLeft,
-  User
+  User,
+  MapPin
 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
@@ -21,6 +22,8 @@ export default function Navbar() {
   const { 
     currentView,
     setCurrentView,
+    deliveryLocation,
+    setIsLocationModalOpen,
     totalCartCount, 
     cartSubtotal, 
     wishlist, 
@@ -66,6 +69,17 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-3 text-[10px]">
+            {/* Delivery Location Pill (Top Ticker like Zepto / Flipkart) */}
+            <button
+              onClick={() => setIsLocationModalOpen(true)}
+              className="hidden md:inline-flex items-center gap-1.5 text-amber-200 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-2 py-0.5 rounded-full border border-amber-300/30 cursor-pointer"
+              title="Change delivery location & check timelines"
+            >
+              <MapPin className="w-2.5 h-2.5 text-amber-300" />
+              <span>Deliver to: <strong>{deliveryLocation?.area || deliveryLocation?.city} - {deliveryLocation?.pincode}</strong></span>
+              <ChevronDown className="w-2.5 h-2.5 opacity-80" />
+            </button>
+
             <span className="hidden sm:inline-flex items-center gap-1 text-amber-200">
               <Truck className="w-3 h-3" /> Free Express Shipping Over ₹2,500
             </span>
@@ -125,6 +139,28 @@ export default function Navbar() {
                 </span>
               </div>
             </div>
+
+            {/* Zepto/Flipkart Delivery Location Picker (Desktop) */}
+            <button
+              onClick={() => setIsLocationModalOpen(true)}
+              className="hidden lg:flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-amber-50/90 hover:bg-amber-100 border border-amber-300/70 shadow-xs cursor-pointer group transition-all text-left max-w-[210px] flex-shrink-0"
+              title="Change delivery address & pincode"
+            >
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-temple-crimson text-white flex items-center justify-center flex-shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col min-w-0 leading-tight">
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-temple-crimson truncate">
+                    {deliveryLocation?.isExpress ? '⚡ 24h Express' : 'Deliver to'}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-slate-400 group-hover:text-slate-700 transition-colors flex-shrink-0" />
+                </div>
+                <span className="text-xs font-bold text-slate-900 truncate">
+                  {deliveryLocation?.area || deliveryLocation?.city} {deliveryLocation?.pincode}
+                </span>
+              </div>
+            </button>
 
             {/* Desktop Search Input */}
             <div className="hidden md:flex flex-1 max-w-md mx-6 relative">
@@ -337,6 +373,31 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* Zepto/Flipkart Mobile Upper Location Bar */}
+      <div 
+        onClick={() => setIsLocationModalOpen(true)}
+        className="lg:hidden w-full bg-gradient-to-r from-amber-50 via-rose-50/80 to-amber-50 border-b border-amber-200/70 px-3 py-1.5 flex items-center justify-between text-xs cursor-pointer active:bg-amber-100/70 transition-colors select-none shadow-xs"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-5 h-5 rounded-full bg-temple-crimson text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+            <MapPin className="w-3 h-3" />
+          </div>
+          <div className="flex items-baseline gap-1 min-w-0 truncate">
+            <span className="text-[11px] text-slate-600 truncate">
+              Deliver to: <strong className="text-slate-900 font-bold">{deliveryLocation?.area || deliveryLocation?.city}</strong> ({deliveryLocation?.pincode})
+            </span>
+            <ChevronDown className="w-3 h-3 text-slate-400 flex-shrink-0" />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 flex-shrink-0 pl-1.5">
+          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-300/50">
+            <span className="text-amber-500 font-black">⚡</span>
+            {deliveryLocation?.deliveryTime ? deliveryLocation.deliveryTime.split(',')[0] : 'Tomorrow'}
+          </span>
+        </div>
+      </div>
 
       {/* Full-Screen Mobile Search Overlay */}
       {isMobileSearchOpen && (

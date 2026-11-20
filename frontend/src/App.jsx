@@ -11,6 +11,7 @@ import DrapeGuideSection from './components/DrapeGuideSection';
 import WhyHarivillu from './components/WhyHarivillu';
 import TestimonialsSection from './components/TestimonialsSection';
 import ProfilePage from './components/ProfilePage';
+import LocationModal from './components/LocationModal';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import QuickViewModal from './components/QuickViewModal';
@@ -58,6 +59,7 @@ function AppContent() {
       {/* Real-time Interactive Drawers & Overlays */}
       <CartDrawer />
       <QuickViewModal />
+      <LocationModal />
       <LiveNotificationToast />
 
       {/* Native App-Like Mobile Bottom Navigation Bar */}

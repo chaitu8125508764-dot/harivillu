@@ -10,6 +10,16 @@ const CURRENCIES = {
   EUR: { symbol: '€', rate: 0.011, name: 'EUR' }
 };
 
+const DEFAULT_DELIVERY_LOCATION = {
+  pincode: '500033',
+  area: 'Jubilee Hills',
+  city: 'Hyderabad',
+  state: 'Telangana',
+  deliveryTime: 'Tomorrow, by 2:00 PM',
+  isExpress: true,
+  expressBadge: '⚡ 24-Hr Express Dispatch'
+};
+
 const DEFAULT_USER_PROFILE = {
   name: 'Sowmya Reddy',
   email: 'sowmya.reddy@example.com',
@@ -80,6 +90,17 @@ export const ShopProvider = ({ children }) => {
     }
   });
 
+  // Zepto / Flipkart Delivery Location
+  const [deliveryLocation, setDeliveryLocation] = useState(() => {
+    try {
+      const saved = localStorage.getItem('harivillu_delivery_location');
+      return saved ? JSON.parse(saved) : DEFAULT_DELIVERY_LOCATION;
+    } catch {
+      return DEFAULT_DELIVERY_LOCATION;
+    }
+  });
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
   const [currency, setCurrency] = useState('INR');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
@@ -107,6 +128,15 @@ export const ShopProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('harivillu_profile', JSON.stringify(userProfile));
   }, [userProfile]);
+
+  useEffect(() => {
+    localStorage.setItem('harivillu_delivery_location', JSON.stringify(deliveryLocation));
+  }, [deliveryLocation]);
+
+  const updateDeliveryLocation = (newLoc) => {
+    setDeliveryLocation(newLoc);
+    showToast(`📍 Delivering to ${newLoc.area}, ${newLoc.city} (${newLoc.pincode})`, 'success');
+  };
 
   // Real-time purchase simulation every 14 seconds
   useEffect(() => {
@@ -237,6 +267,11 @@ export const ShopProvider = ({ children }) => {
       currentView,
       setCurrentView,
       userProfile,
+      deliveryLocation,
+      setDeliveryLocation,
+      updateDeliveryLocation,
+      isLocationModalOpen,
+      setIsLocationModalOpen,
       updateProfileInfo,
       addChildProfile,
       removeChildProfile,

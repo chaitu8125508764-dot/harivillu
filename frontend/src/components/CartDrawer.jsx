@@ -9,7 +9,8 @@ import {
   ShieldCheck, 
   Plus, 
   Minus,
-  CheckCircle2
+  CheckCircle2,
+  MapPin
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useShop } from '../context/ShopContext';
@@ -32,7 +33,9 @@ export default function CartDrawer() {
     setCouponInput, 
     couponError, 
     applyCouponCode, 
-    formatPrice 
+    formatPrice,
+    deliveryLocation,
+    setIsLocationModalOpen
   } = useShop();
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -99,6 +102,22 @@ export default function CartDrawer() {
                 style={{ width: `${progressPercent}%` }}
               ></div>
             </div>
+          </div>
+
+          {/* Zepto/Flipkart Delivery Location Strip in Bag */}
+          <div 
+            onClick={() => setIsLocationModalOpen(true)}
+            className="px-4 py-2 bg-gradient-to-r from-rose-50/70 via-amber-50/70 to-rose-50/70 border-b border-amber-200/60 flex items-center justify-between text-xs cursor-pointer hover:bg-amber-100/50 transition-colors"
+          >
+            <div className="flex items-center gap-2 truncate">
+              <MapPin className="w-3.5 h-3.5 text-temple-crimson flex-shrink-0" />
+              <span className="text-[11px] text-slate-700 truncate">
+                Delivering to: <strong className="text-slate-900 font-bold">{deliveryLocation?.area || deliveryLocation?.city}</strong> ({deliveryLocation?.pincode})
+              </span>
+            </div>
+            <button className="text-[11px] font-bold text-temple-crimson hover:underline flex-shrink-0 ml-2">
+              Change
+            </button>
           </div>
 
           {/* Body Content */}

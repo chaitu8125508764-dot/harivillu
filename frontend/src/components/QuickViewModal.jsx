@@ -9,7 +9,8 @@ import {
   MessageCircle,
   Eye,
   Check,
-  Ruler
+  Ruler,
+  MapPin
 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
@@ -20,7 +21,9 @@ export default function QuickViewModal() {
     addToCart, 
     wishlist, 
     toggleWishlist, 
-    formatPrice 
+    formatPrice,
+    deliveryLocation,
+    setIsLocationModalOpen
   } = useShop();
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -134,6 +137,29 @@ export default function QuickViewModal() {
                       <span>{feat}</span>
                     </div>
                   ))}
+                </div>
+
+                {/* Zepto/Flipkart Delivery Location ETA Banner */}
+                <div 
+                  onClick={() => setIsLocationModalOpen(true)}
+                  className="mt-3 flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-50 via-rose-50/60 to-amber-50 border border-amber-200/80 cursor-pointer hover:bg-amber-100/60 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-temple-crimson text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                      <MapPin className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-[11px] leading-tight">
+                      <p className="text-slate-800">
+                        Deliver to <strong className="font-bold text-slate-900">{deliveryLocation?.area || deliveryLocation?.city} - {deliveryLocation?.pincode}</strong>
+                      </p>
+                      <p className="text-[10px] text-emerald-700 font-bold flex items-center gap-1 mt-0.5">
+                        <span>⚡ {deliveryLocation?.deliveryTime || 'Tomorrow, by 2:00 PM'}</span>
+                        <span className="text-slate-300">|</span>
+                        <span>Free Express Air</span>
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold text-temple-crimson hover:underline ml-2">Change</span>
                 </div>
 
                 {/* Age selector */}
