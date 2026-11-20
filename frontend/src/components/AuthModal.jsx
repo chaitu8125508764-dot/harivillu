@@ -11,7 +11,8 @@ import {
   ArrowRight, 
   Crown,
   KeyRound,
-  RotateCcw,
+  Eye,
+  EyeOff,
   MessageSquare
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -26,22 +27,27 @@ export default function AuthModal() {
     showToast 
   } = useShop();
 
-  const [authMode, setAuthMode] = useState('otp'); // 'otp' | 'email' | 'register'
+  const [authMethod, setAuthMethod] = useState('otp'); // 'otp' | 'email' | 'register'
+  
+  // Mobile OTP state
   const [phoneNumber, setPhoneNumber] = useState('98480 22338');
   const [otpSent, setOtpSent] = useState(false);
   const [otpDigits, setOtpDigits] = useState(['4', '2', '9', '8']);
   const [resendTimer, setResendTimer] = useState(30);
 
-  // Email form state
+  // Email & Password state
   const [email, setEmail] = useState('sowmya.reddy@example.com');
-  const [password, setPassword] = useState('••••••••');
+  const [password, setPassword] = useState('silkroyal2026');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
 
   // Register form state
   const [registerForm, setRegisterForm] = useState({
     name: '',
     phone: '',
     email: '',
-    daughterName: ''
+    daughterName: '',
+    password: ''
   });
 
   // OTP Countdown timer
@@ -87,18 +93,32 @@ export default function AuthModal() {
 
   const handleEmailLogin = (e) => {
     e.preventDefault();
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      showToast('Please enter a valid email address', 'error');
+      return;
+    }
+    if (!password || password.length < 6) {
+      showToast('Password must be at least 6 characters', 'error');
+      return;
+    }
+
     confetti({
-      particleCount: 80,
-      spread: 60,
+      particleCount: 100,
+      spread: 70,
       origin: { y: 0.6 }
     });
-    login({ email });
+
+    login({
+      email: cleanEmail,
+      name: cleanEmail.toLowerCase().includes('sowmya') ? userProfile.name : cleanEmail.split('@')[0]
+    });
   };
 
   const handleRegister = (e) => {
     e.preventDefault();
-    if (!registerForm.name || !registerForm.phone) {
-      showToast('Please fill in required fields', 'error');
+    if (!registerForm.name || !registerForm.email || !registerForm.phone) {
+      showToast('Please fill in all required fields', 'error');
       return;
     }
 
@@ -110,8 +130,8 @@ export default function AuthModal() {
 
     login({
       name: registerForm.name,
-      phone: `+91 ${registerForm.phone}`,
-      email: registerForm.email || `${registerForm.name.toLowerCase().replace(/\s+/g, '')}@example.com`
+      email: registerForm.email,
+      phone: `+91 ${registerForm.phone}`
     });
   };
 
@@ -122,6 +142,12 @@ export default function AuthModal() {
       origin: { y: 0.5 }
     });
     login();
+  };
+
+  const handleFillDemoEmail = () => {
+    setEmail('sowmya.reddy@example.com');
+    setPassword('silkroyal2026');
+    showToast('Demo email credentials filled!', 'info');
   };
 
   return (
@@ -143,7 +169,7 @@ export default function AuthModal() {
         </div>
 
         {/* Brand Header */}
-        <div className="relative px-6 pt-6 pb-5 bg-gradient-to-br from-[#FFF9F2] via-rose-50/50 to-amber-50/80 border-b border-amber-900/10 text-center">
+        <div className="relative px-6 pt-5 pb-4 bg-gradient-to-br from-[#FFF9F2] via-rose-50/50 to-amber-50/80 border-b border-amber-900/10 text-center">
           
           <button
             onClick={() => setIsAuthModalOpen(false)}
@@ -154,7 +180,7 @@ export default function AuthModal() {
           </button>
 
           {/* Logo Crest */}
-          <div className="relative w-14 h-14 mx-auto rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-600 shadow-lg flex items-center justify-center mb-2.5">
+          <div className="relative w-12 h-12 mx-auto rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-600 shadow-lg flex items-center justify-center mb-2">
             <div className="w-full h-full rounded-full bg-white overflow-hidden p-0.5 flex items-center justify-center shadow-inner">
               <img
                 src="/images/harivillu-logo.jpg"
@@ -167,17 +193,17 @@ export default function AuthModal() {
             </div>
           </div>
 
-          <h3 className="font-serif text-xl sm:text-2xl font-bold text-slate-900 leading-tight">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 leading-tight">
             Harivillu VIP Club
           </h3>
-          <p className="text-xs text-slate-600 mt-1 max-w-xs mx-auto">
-            Log in to view orders, saved princess measurements & 450 Silk Coins
+          <p className="text-xs text-slate-600 mt-0.5 max-w-xs mx-auto">
+            Log in to view orders, daughter sizing vault & 450 Silk Coins
           </p>
 
           {/* Royalty Perks Banner */}
-          <div className="flex items-center justify-center gap-2 mt-3 text-[11px] font-semibold text-amber-900 bg-amber-400/15 border border-amber-400/30 py-1.5 px-3 rounded-full">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>FLAT 20% OFF Welcome Coupon Unlocked</span>
+          <div className="inline-flex items-center gap-1.5 mt-2.5 text-[10px] font-semibold text-amber-900 bg-amber-400/20 border border-amber-400/40 py-1 px-3 rounded-full">
+            <Sparkles className="w-3 h-3 text-amber-600" />
+            <span>FLAT 20% OFF Welcome Code Unlocked</span>
           </div>
         </div>
 
@@ -187,38 +213,160 @@ export default function AuthModal() {
           {/* Quick Demo One-Click Login Button */}
           <button
             onClick={handleQuickDemoLogin}
-            className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-temple-crimson via-rani-800 to-temple-crimson text-white shadow-md hover:brightness-105 active:scale-[0.98] transition-all group border border-amber-300/40"
+            className="w-full flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-temple-crimson via-rani-800 to-temple-crimson text-white shadow-md hover:brightness-105 active:scale-[0.98] transition-all group border border-amber-300/40"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xs shadow-inner">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xs shadow-inner">
                 SR
               </div>
               <div className="text-left">
                 <p className="text-xs font-bold text-white flex items-center gap-1.5">
                   <span>Continue as {userProfile.name}</span>
-                  <span className="text-[10px] bg-amber-300 text-slate-950 font-extrabold px-1.5 py-0.2 rounded-full">
+                  <span className="text-[9px] bg-amber-300 text-slate-950 font-extrabold px-1.5 py-0.2 rounded-full">
                     VIP
                   </span>
                 </p>
-                <p className="text-[11px] text-pink-100/90">
-                  Instant Demo Login • 450 Silk Coins
+                <p className="text-[10px] text-pink-100/90">
+                  Instant 1-Click Login • 450 Coins
                 </p>
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-amber-300 group-hover:translate-x-1 transition-transform" />
           </button>
 
-          <div className="relative flex py-1 items-center">
-            <div className="flex-grow border-t border-slate-200"></div>
-            <span className="flex-shrink mx-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Or Sign In With Mobile
-            </span>
-            <div className="flex-grow border-t border-slate-200"></div>
+          {/* Authentication Method Tabs: Mobile OTP vs Email Login vs Register */}
+          <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
+            <button
+              onClick={() => {
+                setAuthMethod('otp');
+                setOtpSent(false);
+              }}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                authMethod === 'otp'
+                  ? 'bg-white text-temple-crimson shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>Mobile OTP</span>
+            </button>
+
+            <button
+              onClick={() => setAuthMethod('email')}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                authMethod === 'email'
+                  ? 'bg-white text-temple-crimson shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span>Email Login</span>
+            </button>
+
+            <button
+              onClick={() => setAuthMethod('register')}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                authMethod === 'register'
+                  ? 'bg-white text-temple-crimson shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Sign Up</span>
+            </button>
           </div>
 
-          {/* OTP Login Form */}
-          {authMode === 'otp' && (
-            <div className="space-y-3.5">
+          {/* 1. EMAIL & PASSWORD LOGIN */}
+          {authMethod === 'email' && (
+            <form onSubmit={handleEmailLogin} className="space-y-3.5 animate-in fade-in duration-200">
+              {/* Email Input */}
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type="email"
+                    placeholder="sowmya.reddy@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white shadow-inner"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password Input */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => showToast('Password reset link sent to your email!', 'info')}
+                    className="text-[11px] text-temple-crimson hover:underline font-semibold"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                <div className="relative flex items-center">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white shadow-inner"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 text-slate-400 hover:text-slate-700"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Remember Me & Demo Fill */}
+              <div className="flex items-center justify-between text-xs">
+                <label className="flex items-center gap-1.5 cursor-pointer text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="rounded text-temple-crimson focus:ring-temple-crimson"
+                  />
+                  <span>Remember Me</span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={handleFillDemoEmail}
+                  className="text-[11px] text-amber-700 font-bold hover:underline flex items-center gap-1"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <span>Auto-fill Demo Email</span>
+                </button>
+              </div>
+
+              {/* Submit Email Login */}
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl rani-gradient-bg text-white text-xs font-bold shadow-md hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Sign In with Email</span>
+              </button>
+            </form>
+          )}
+
+          {/* 2. MOBILE OTP LOGIN */}
+          {authMethod === 'otp' && (
+            <div className="space-y-3.5 animate-in fade-in duration-200">
               {!otpSent ? (
                 <form onSubmit={handleSendOtp} className="space-y-3">
                   <div>
@@ -317,8 +465,72 @@ export default function AuthModal() {
             </div>
           )}
 
+          {/* 3. NEW VIP REGISTRATION */}
+          {authMethod === 'register' && (
+            <form onSubmit={handleRegister} className="space-y-3 animate-in fade-in duration-200">
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Full Name
+                </label>
+                <div className="relative flex items-center">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type="text"
+                    placeholder="e.g. Sowmya Reddy"
+                    value={registerForm.name}
+                    onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
+                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    value={registerForm.email}
+                    onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  Mobile Number
+                </label>
+                <div className="relative flex items-center">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type="tel"
+                    placeholder="98480 22338"
+                    value={registerForm.phone}
+                    onChange={(e) => setRegisterForm({ ...registerForm, phone: e.target.value })}
+                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-temple-crimson focus:bg-white"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2.5 rounded-xl rani-gradient-bg text-white text-xs font-bold shadow-md hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-2 mt-2"
+              >
+                <Crown className="w-4 h-4" />
+                <span>Create VIP Account (Earn 100 Coins)</span>
+              </button>
+            </form>
+          )}
+
           {/* Social Sign-In Options */}
-          <div className="space-y-2 pt-1">
+          <div className="space-y-2 pt-1 border-t border-slate-100">
             <button
               onClick={() => {
                 confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
@@ -332,7 +544,7 @@ export default function AuthModal() {
           </div>
 
           {/* Footer Terms */}
-          <div className="text-center pt-2 border-t border-slate-100">
+          <div className="text-center pt-1">
             <p className="text-[10px] text-slate-400">
               By proceeding, you agree to Harivillu Collections' <a href="#" className="underline">Terms of Service</a> & <a href="#" className="underline">Privacy Policy</a>
             </p>
