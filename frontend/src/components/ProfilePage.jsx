@@ -20,7 +20,8 @@ import {
   Check, 
   MessageCircle, 
   ChevronRight,
-  Ruler
+  Ruler,
+  LogOut
 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
@@ -28,6 +29,7 @@ export default function ProfilePage() {
   const { 
     userProfile, 
     setCurrentView, 
+    logout,
     addChildProfile, 
     removeChildProfile, 
     wishlist, 
@@ -97,9 +99,19 @@ export default function ProfilePage() {
             <span>Back to Shopping</span>
           </button>
           
-          <span className="text-xs text-slate-500 font-medium hidden sm:inline-block">
-            Harivillu Collections VIP Member Portal
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 font-medium hidden sm:inline-block">
+              Harivillu Collections VIP Member Portal
+            </span>
+            <button
+              onClick={logout}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 text-temple-crimson hover:bg-rose-100 font-semibold text-xs border border-rose-200 transition-colors shadow-xs active:scale-95"
+              title="Sign out of your VIP account"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
 
         {/* User Profile Grand Card */}

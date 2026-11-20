@@ -22,6 +22,9 @@ export default function Navbar() {
   const { 
     currentView,
     setCurrentView,
+    isAuthenticated,
+    setIsAuthModalOpen,
+    userProfile,
     deliveryLocation,
     setIsLocationModalOpen,
     totalCartCount, 
@@ -240,8 +243,12 @@ export default function Navbar() {
               {/* User Profile Button (Desktop & Mobile) */}
               <button
                 onClick={() => {
-                  setCurrentView(currentView === 'profile' ? 'home' : 'profile');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  if (!isAuthenticated) {
+                    setIsAuthModalOpen(true);
+                  } else {
+                    setCurrentView(currentView === 'profile' ? 'home' : 'profile');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
                 }}
                 className={`relative p-2 sm:p-2.5 rounded-full transition-all active:scale-90 ${
                   currentView === 'profile'
@@ -249,12 +256,15 @@ export default function Navbar() {
                     : 'text-slate-700 hover:text-rani-600 hover:bg-rose-50'
                 }`}
                 aria-label="Profile and Orders"
-                title="My Profile & Sizing Vault"
+                title={isAuthenticated ? 'VIP Member Profile & Sizing Vault' : 'Sign In to Harivillu VIP Club'}
               >
                 <User className="w-5 h-5" />
                 <span className="hidden xl:inline text-xs font-semibold ml-1.5">
-                  {currentView === 'profile' ? 'Home' : 'Profile'}
+                  {!isAuthenticated ? 'Sign In' : currentView === 'profile' ? 'Home' : userProfile.name.split(' ')[0]}
                 </span>
+                {!isAuthenticated && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                )}
               </button>
 
               {/* Wishlist Button (Desktop) */}

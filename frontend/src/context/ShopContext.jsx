@@ -101,6 +101,34 @@ export const ShopProvider = ({ children }) => {
   });
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
+  // VIP Customer Authentication
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return localStorage.getItem('harivillu_auth') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const login = (customData = null) => {
+    setIsAuthenticated(true);
+    localStorage.setItem('harivillu_auth', 'true');
+    if (customData) {
+      setUserProfile(prev => ({ ...prev, ...customData }));
+    }
+    setIsAuthModalOpen(false);
+    setCurrentView('profile');
+    showToast(`👑 Welcome back, ${customData?.name || userProfile.name}! VIP benefits unlocked.`, 'success');
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.setItem('harivillu_auth', 'false');
+    setCurrentView('home');
+    showToast('👋 You have been logged out.', 'info');
+  };
+
   const [currency, setCurrency] = useState('INR');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
@@ -266,6 +294,12 @@ export const ShopProvider = ({ children }) => {
     <ShopContext.Provider value={{
       currentView,
       setCurrentView,
+      isAuthenticated,
+      setIsAuthenticated,
+      isAuthModalOpen,
+      setIsAuthModalOpen,
+      login,
+      logout,
       userProfile,
       deliveryLocation,
       setDeliveryLocation,

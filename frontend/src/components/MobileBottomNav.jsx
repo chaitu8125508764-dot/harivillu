@@ -6,6 +6,8 @@ export default function MobileBottomNav() {
   const { 
     currentView,
     setCurrentView,
+    isAuthenticated,
+    setIsAuthModalOpen,
     totalCartCount, 
     cartSubtotal, 
     wishlist, 
@@ -15,8 +17,12 @@ export default function MobileBottomNav() {
 
   const handleNavClick = (view, sectionId = null) => {
     if (view === 'profile') {
-      setCurrentView('profile');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!isAuthenticated) {
+        setIsAuthModalOpen(true);
+      } else {
+        setCurrentView('profile');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     } else {
       setCurrentView('home');
       if (sectionId) {
