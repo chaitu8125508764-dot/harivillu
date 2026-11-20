@@ -114,7 +114,7 @@ export default function MobileStoriesBar() {
                   </span>
                 </div>
               </div>
-              
+
               <span className={`text-[11px] font-semibold tracking-tight ${isSelected ? 'text-temple-crimson font-bold' : 'text-slate-700'}`}>
                 {s.label}
               </span>
