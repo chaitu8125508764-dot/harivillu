@@ -3,6 +3,7 @@ import { Sparkles, Check, ShoppingBag, MessageCircle, RefreshCw, Palette } from 
 import { useShop } from '../context/ShopContext';
 
 const SILK_PALETTES = [
+  { name: 'Rajkumari Jamun Purple', hex: '#4a1d4e', borderHex: '#c5a059', blouse: '#2d0a32' },
   { name: 'Kanchi Peacock Teal', hex: '#0e7490', borderHex: '#d4af37', blouse: '#9d174d' },
   { name: 'Rani Magenta Pink', hex: '#be185d', borderHex: '#ca8a04', blouse: '#047857' },
   { name: 'Turmeric Gold Yellow', hex: '#d97706', borderHex: '#881337', blouse: '#be123c' },

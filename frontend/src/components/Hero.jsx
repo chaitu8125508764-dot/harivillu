@@ -4,6 +4,15 @@ import { useShop } from '../context/ShopContext';
 
 const HERO_SLIDES = [
   {
+    title: 'Rajkumari Jamun Aubergine Pure Silk Zari Checks Saree',
+    tagline: 'HANDWOVEN KATTAM CHECKS • ANTIQUE ROSE-GOLD PALLU',
+    description: 'Our most coveted festive masterpiece. Handwoven in deep royal aubergine jamun purple with fine metallic micro-checks and an exquisite antique zari drape.',
+    ctaText: 'Shop New Launch #1',
+    category: 'kanchi-silks',
+    image: '/images/saree-aubergine-purple.jpg',
+    accent: 'bg-purple-950'
+  },
+  {
     title: 'Pure Kanchipuram Silks, Handcrafted for Young Royalty',
     tagline: 'FEATHER-LIGHT WEAVES • ZERO-ITCH COTTON LINING',
     description: 'Introducing Harivillu’s royal festive collection for girls aged 2 to 18 years. Handwoven with authentic gold zari and kid-safe soft finishes.',

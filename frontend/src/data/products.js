@@ -48,6 +48,39 @@ export const CATEGORIES = [
 
 export const PRODUCTS = [
   {
+    id: 'hvs-000',
+    name: 'Rajkumari Jamun Aubergine Pure Chanderi Silk Zari Checks Saree',
+    category: 'kanchi-silks',
+    price: 4899,
+    originalPrice: 6999,
+    discount: '30% OFF',
+    rating: 5.0,
+    reviewsCount: 184,
+    ageGroups: ['6-8 Yrs', '9-11 Yrs', '12-14 Yrs', '15-18 Yrs (Teen & Young Adults)'],
+    selectedAge: '12-14 Yrs',
+    fabric: 'Pure Chanderi & Katan Silk with Antique Rose-Gold Zari Weave',
+    colorName: 'Royal Aubergine Purple & Antique Rose-Gold Zari',
+    colorHex: '#4A1D4E',
+    contrastColorHex: '#C5A059',
+    tag: '🔥 #1 Trending New Launch',
+    readyToWear: true,
+    viewsNow: 42,
+    stockLeft: 4,
+    images: [
+      '/images/saree-aubergine-purple.jpg',
+      '/images/saree-crimson-1min.jpg',
+      '/images/saree-peacock-teal.jpg'
+    ],
+    features: [
+      'Silk Mark Certified 100% Pure Handloom Silk',
+      'Exquisite Fine Gold Kattam (Micro-Checks) Handloom Weave',
+      'Grand Antique Rose-Gold Tissue Zari Border & Rich Pallu',
+      'Pre-pleated 60-second slip-on option with zero-itch cotton lining',
+      'Includes stitched custom tailored designer blouse with matching border'
+    ],
+    description: 'A showstopping royal masterpiece in regal Aubergine Jamun purple, woven with delicate micro-checks (Kattam) and framed by a rich antique rose-gold tissue zari border and pallu. Handcrafted with ultra-soft handloom silk for girls and teens to experience heritage royalty with effortless comfort and elegance.'
+  },
+  {
     id: 'hvs-001',
     name: 'Mayura Peacock Kanchipuram Pure Silk Girl Saree',
     category: 'kanchi-silks',

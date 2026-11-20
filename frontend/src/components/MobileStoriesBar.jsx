@@ -4,6 +4,16 @@ import { useShop } from '../context/ShopContext';
 
 const STORIES = [
   {
+    id: 'aubergine-checks',
+    label: 'Jamun Silk',
+    badge: 'NEW #1',
+    icon: Crown,
+    gradient: 'from-purple-600 via-rose-600 to-amber-500',
+    type: 'category',
+    value: 'all',
+    image: '/images/saree-aubergine-purple.jpg'
+  },
+  {
     id: 'ready-to-wear',
     label: '1-Min Drape',
     badge: 'HOT',
