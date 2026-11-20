@@ -10,7 +10,48 @@ const CURRENCIES = {
   EUR: { symbol: '€', rate: 0.011, name: 'EUR' }
 };
 
+const DEFAULT_USER_PROFILE = {
+  name: 'Sowmya Reddy',
+  email: 'sowmya.reddy@example.com',
+  phone: '+91 98480 22338',
+  memberTier: 'Silk Royalty Member',
+  silkCoins: 450,
+  children: [
+    { id: 1, name: 'Ananya', relation: 'Daughter', age: '7 Yrs', height: '118 cm', waist: '22 in', blouseChest: '24 in', skirtLength: '28 in', notes: 'Prefers soft cotton cambric lining' },
+    { id: 2, name: 'Diya', relation: 'Niece', age: '4 Yrs', height: '95 cm', waist: '19 in', blouseChest: '21 in', skirtLength: '22 in', notes: 'Prefers 60-second ready-to-wear clasp' }
+  ],
+  addresses: [
+    { id: 1, label: 'Home (Default)', address: 'Plot 42, Jubilee Hills Road No 36', city: 'Hyderabad', state: 'Telangana', pincode: '500033', isDefault: true },
+    { id: 2, label: 'Parents / Festival Gifting', address: '14/B Gandhi Road, Maharani Peta', city: 'Visakhapatnam', state: 'Andhra Pradesh', pincode: '530002', isDefault: false }
+  ],
+  orderHistory: [
+    {
+      orderNumber: 'HVS-88492',
+      date: '15 Nov 2026',
+      productName: 'Mayura Peacock Kanchipuram Pure Silk Girl Saree',
+      ageGroup: '7-9 Yrs',
+      amount: 4499,
+      status: 'Delivered',
+      trackingId: 'DTDC-9921838',
+      image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80'
+    },
+    {
+      orderNumber: 'HVS-73201',
+      date: '18 Nov 2026',
+      productName: 'Karpaga Swarna Rani Pink Pre-Stitched Half-Saree Set',
+      ageGroup: '5-7 Yrs',
+      amount: 3899,
+      status: 'In Custom Blouse Stitching',
+      trackingId: 'BLUE-440219',
+      image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80'
+    }
+  ]
+};
+
 export const ShopProvider = ({ children }) => {
+  // Navigation View: 'home' | 'profile'
+  const [currentView, setCurrentView] = useState('home');
+
   // Load saved Cart & Wishlist
   const [cart, setCart] = useState(() => {
     try {
@@ -27,6 +68,15 @@ export const ShopProvider = ({ children }) => {
       return saved ? JSON.parse(saved) : ['hvs-001', 'hvs-005'];
     } catch {
       return ['hvs-001', 'hvs-005'];
+    }
+  });
+
+  const [userProfile, setUserProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem('harivillu_profile');
+      return saved ? JSON.parse(saved) : DEFAULT_USER_PROFILE;
+    } catch {
+      return DEFAULT_USER_PROFILE;
     }
   });
 
@@ -53,6 +103,10 @@ export const ShopProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('harivillu_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
+
+  useEffect(() => {
+    localStorage.setItem('harivillu_profile', JSON.stringify(userProfile));
+  }, [userProfile]);
 
   // Real-time purchase simulation every 14 seconds
   useEffect(() => {
@@ -142,6 +196,27 @@ export const ShopProvider = ({ children }) => {
     }
   };
 
+  const addChildProfile = (childData) => {
+    setUserProfile(prev => ({
+      ...prev,
+      children: [...prev.children, { id: Date.now(), ...childData }]
+    }));
+    showToast(`Added measurements for ${childData.name}! 👑`);
+  };
+
+  const removeChildProfile = (id) => {
+    setUserProfile(prev => ({
+      ...prev,
+      children: prev.children.filter(c => c.id !== id)
+    }));
+    showToast('Measurements removed', 'info');
+  };
+
+  const updateProfileInfo = (updatedInfo) => {
+    setUserProfile(prev => ({ ...prev, ...updatedInfo }));
+    showToast('Profile updated successfully!');
+  };
+
   // Calculations
   const cartSubtotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   const discountAmount = coupon.applied ? Math.round((cartSubtotal * coupon.discount) / 100) : 0;
@@ -159,6 +234,12 @@ export const ShopProvider = ({ children }) => {
 
   return (
     <ShopContext.Provider value={{
+      currentView,
+      setCurrentView,
+      userProfile,
+      updateProfileInfo,
+      addChildProfile,
+      removeChildProfile,
       products: PRODUCTS,
       cart,
       wishlist,

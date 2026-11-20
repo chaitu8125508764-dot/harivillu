@@ -12,12 +12,15 @@ import {
   Compass,
   MessageCircle,
   Truck,
-  ArrowLeft
+  ArrowLeft,
+  User
 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 
 export default function Navbar() {
   const { 
+    currentView,
+    setCurrentView,
     totalCartCount, 
     cartSubtotal, 
     wishlist, 
@@ -94,7 +97,10 @@ export default function Navbar() {
             {/* Brand Logo */}
             <div 
               className="flex items-center gap-2 sm:gap-3 cursor-pointer select-none" 
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => {
+                setCurrentView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
             >
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full p-0.5 bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-600 shadow-md flex items-center justify-center flex-shrink-0">
                 <div className="w-full h-full rounded-full bg-white overflow-hidden p-0.5 flex items-center justify-center shadow-inner">
@@ -194,6 +200,26 @@ export default function Navbar() {
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" />
                 <span>Live Stylist</span>
               </a>
+
+              {/* User Profile Button (Desktop & Mobile) */}
+              <button
+                onClick={() => {
+                  setCurrentView(currentView === 'profile' ? 'home' : 'profile');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`relative p-2 sm:p-2.5 rounded-full transition-all active:scale-90 ${
+                  currentView === 'profile'
+                    ? 'text-temple-crimson bg-amber-100 ring-2 ring-amber-400/60 shadow-sm'
+                    : 'text-slate-700 hover:text-rani-600 hover:bg-rose-50'
+                }`}
+                aria-label="Profile and Orders"
+                title="My Profile & Sizing Vault"
+              >
+                <User className="w-5 h-5" />
+                <span className="hidden xl:inline text-xs font-semibold ml-1.5">
+                  {currentView === 'profile' ? 'Home' : 'Profile'}
+                </span>
+              </button>
 
               {/* Wishlist Button (Desktop) */}
               <button

@@ -34,7 +34,7 @@ const HERO_SLIDES = [
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [touchStart, setTouchStart] = useState(null);
+  const [touchCoords, setTouchCoords] = useState(null);
   const { setSelectedCategory, setQuickViewProduct, products, addToCart, formatPrice } = useShop();
 
   const featuredProduct = products[0]; // Mayura Peacock Saree
@@ -47,43 +47,56 @@ export default function Hero() {
     return () => clearInterval(timer);
   }, []);
 
-  // Mobile Swipe Gesture Handlers
+  // Safe Horizontal Swipe Gesture Handlers (Allows 100% natural vertical up/down scrolling)
   const handleTouchStart = (e) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    if (e.targetTouches.length === 1) {
+      setTouchCoords({
+        x: e.targetTouches[0].clientX,
+        y: e.targetTouches[0].clientY
+      });
+    }
   };
 
   const handleTouchEnd = (e) => {
-    if (!touchStart) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) {
-      // swipe left -> next
-      setCurrentSlide(prev => (prev + 1) % HERO_SLIDES.length);
-    } else if (diff < -50) {
-      // swipe right -> prev
-      setCurrentSlide(prev => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    if (!touchCoords || e.changedTouches.length === 0) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = touchCoords.x - endX;
+    const diffY = touchCoords.y - endY;
+
+    // Only swipe if horizontal motion was substantially greater than vertical motion
+    if (Math.abs(diffX) > Math.abs(diffY) * 1.5 && Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        // swipe left -> next
+        setCurrentSlide(prev => (prev + 1) % HERO_SLIDES.length);
+      } else {
+        // swipe right -> prev
+        setCurrentSlide(prev => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+      }
     }
+    setTouchCoords(null);
   };
 
   const slide = HERO_SLIDES[currentSlide];
 
   return (
-    <section 
+    <section
       className="relative overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF4EA] to-[#F5ECE0] pt-4 sm:pt-6 pb-12 lg:pb-24 border-b border-amber-900/10"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      style={{ touchAction: 'pan-y' }}
     >
-      
+
       {/* Decorative Glows */}
       <div className="absolute top-0 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-rose-200/40 rounded-full blur-3xl pointer-events-none -z-0"></div>
       <div className="absolute top-1/3 right-5 w-72 sm:w-96 h-72 sm:h-96 bg-amber-200/50 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
-          
+
           {/* Left Column: Headline & Actions */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-            
+
             {/* Tagline Pill */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/90 border border-amber-300 text-amber-950 text-[11px] font-bold tracking-wide shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-amber-700 fill-amber-500 animate-bounce" />
@@ -103,7 +116,7 @@ export default function Hero() {
               {slide.description}
             </p>
 
-            {/* Mobile Swipeable Actions */}
+            {/* Mobile Actions */}
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 pt-1 sm:pt-2">
               <button
                 onClick={() => {
@@ -168,9 +181,8 @@ export default function Hero() {
                 <button
                   key={idx}
                   onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === idx ? 'w-7 bg-temple-crimson' : 'w-2 bg-slate-300'
-                  }`}
+                  className={`h-2 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-7 bg-temple-crimson' : 'w-2 bg-slate-300'
+                    }`}
                   aria-label={`Slide ${idx + 1}`}
                 />
               ))}
@@ -181,7 +193,7 @@ export default function Hero() {
           {/* Right Column: Hero Visual Card */}
           <div className="lg:col-span-5 relative mt-2 sm:mt-0">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              
+
               <div className="relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-white">
                 <div className="relative h-[300px] sm:h-[460px] w-full overflow-hidden">
                   <img
@@ -220,7 +232,7 @@ export default function Hero() {
                     <h3 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
                       {featuredProduct.name}
                     </h3>
-                    
+
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-sm sm:text-base font-extrabold text-temple-crimson">

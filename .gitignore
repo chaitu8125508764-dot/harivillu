@@ -26,6 +26,8 @@ dist/
 frontend/dist/
 dist-ssr/
 *.local
+target/
+backend/target/
 
 # Environment variables
 .env
